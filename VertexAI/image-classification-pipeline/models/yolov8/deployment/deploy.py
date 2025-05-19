@@ -1,3 +1,5 @@
+print("Importing libraries")
+
 import io
 import base64
 from typing import List
@@ -5,10 +7,20 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from PIL import Image
 from ultralytics import YOLO
+import uvicorn
 import numpy as np
+import os 
+
+print("Libraries imported")
+
+model_dir = os.getenv("MODEL_DIR")
+
+print(f"Env var: {model_dir}")
 
 # Load your YOLOv8 classification model
-model = YOLO("/content/best.pt")
+model = YOLO(f"{model_dir}/best.pt")
+
+print("Model loaded")
 
 app = FastAPI()
 
@@ -57,5 +69,6 @@ async def predict(request: PredictRequest):
 
 
 if __name__ == "__main__":
-    import uvicorn
+
+    print("Deploying the model")
     uvicorn.run(app, host="0.0.0.0", port=8080)
